@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static model.constants.Token.ACCESS_TOKEN;
+import static org.hamcrest.Matchers.equalTo;
 
 public class Mesto1Test {
 
@@ -37,6 +38,16 @@ public class Mesto1Test {
 
         likePhotoById(photoId);
         deleteLikePhotoById(photoId);
+    }
+
+    @Test
+    @DisplayName("Check user name")
+    @Description("This test is for check current user's name.")
+    public void checkUserName() {
+        given()
+                .auth().oauth2(bearerToken) // Передаём токен для аутентификации
+                .get("/api/users/me") // Делаем GET-запрос
+                .then().assertThat().body("data.name", equalTo("Incorrect Name")); // Проверяем, что имя соответствует ожидаемому
     }
 
     @Step("Take the first photo from the list")
